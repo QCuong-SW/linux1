@@ -1,0 +1,10 @@
+// Models will be added during the database implementation step.
+generator client {
+  provider = "prisma-client"
+  output = "../src/database/prisma/generated"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MiniFlow — UI mock</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="auth-view" class="auth-view" hidden>
+    <div class="auth-card">
+      <a class="brand" href="#dashboard"><span class="brand-mark">m</span> MiniFlow</a>
+      <h1 id="auth-title">Chào mừng trở lại</h1>
+      <p class="muted">Một nơi gọn gàng cho project và task của bạn.</p>
+      <form id="auth-form">
+        <label>Email<input type="email" placeholder="ban@example.com" required></label>
+        <label>Mật khẩu<input type="password" placeholder="Ít nhất 8 ký tự" minlength="8" required></label>
+        <button class="primary" id="auth-submit">Đăng nhập</button>
+      </form>
+      <p class="auth-switch"><span id="auth-question">Chưa có tài khoản?</span> <button class="text-button" id="auth-toggle">Đăng ký</button></p>
+      <div class="mock-note">Bản mock • Không gửi hay lưu thông tin đăng nhập.</div>
+    </div>
+  </section>
+
+  <div id="app-view" class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard"><span class="brand-mark">m</span> MiniFlow</a>
+      <div class="workspace-label">WORKSPACE CỦA BẠN</div>
+      <nav>
+        <a href="#dashboard" data-nav="dashboard"><span>◫</span> Dashboard</a>
+        <a href="#projects" data-nav="projects"><span>▤</span> Projects <small id="project-count">3</small></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mock-note">UI preview<br><span>Dữ liệu mẫu trong bộ nhớ</span></div>
+        <div class="profile"><div class="avatar">B</div><div><strong>Bạn</strong><span>ban@example.com</span></div><a href="#login" title="Đăng xuất">↗</a></div>
+      </div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><span id="breadcrumb">Workspace / Dashboard</span><a href="#login">Xem màn hình đăng nhập ↗</a></header>
+      <main id="content"></main>
+      <footer>MiniFlow <span>Ít thao tác hơn. Rõ việc hơn.</span></footer>
+    </div>
+  </div>
+
+  <dialog id="create-dialog">
+    <form id="create-form">
+      <div class="dialog-heading"><h2 id="dialog-title">Tạo Project</h2><button type="button" class="icon-button" id="close-dialog" aria-label="Đóng">×</button></div>
+      <label id="name-label">Tên Project<input id="item-name" maxlength="100" required placeholder="Ví dụ: Website công ty"></label>
+      <label id="description-label" hidden>Mô tả<textarea id="item-description" rows="3" maxlength="1000" placeholder="Thêm một chút thông tin cho task…"></textarea></label>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancel-dialog">Hủy</button><button class="primary">Tạo mới</button></div>
+    </form>
+  </dialog>
+  <div id="toast" role="status" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

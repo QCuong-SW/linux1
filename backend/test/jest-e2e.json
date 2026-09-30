@@ -1,0 +1,18 @@
+{
+  "rootDir": "..",
+  "testRegex": ".*\\.e2e-spec\\.ts$",
+  "transform": {
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "module": "commonjs",
+          "moduleResolution": "node",
+          "rootDir": ".",
+          "isolatedModules": true
+        }
+      }
+    ]
+  },
+  "testEnvironment": "node"
+}
