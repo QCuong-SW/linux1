@@ -28,11 +28,11 @@ Một lockfile tại root khóa dependency của hai workspace. `npm ci` dùng t
 | .editorconfig, .prettierrc.json | Format thống nhất                              |
 | .gitignore, .dockerignore       | Loại secret, dependency và build output        |
 | frontend/next.config.ts         | Standalone output cho Docker workspace         |
-| frontend/tsconfig.json          | Strict TypeScript, alias @/*                   |
+| frontend/tsconfig.json          | Strict TypeScript, alias @/\*                  |
 | frontend/postcss.config.mjs     | Tailwind v4                                    |
 | frontend/eslint.config.mjs      | Next ESLint                                    |
 | backend/nest-cli.json           | Nest CLI build                                 |
-| backend/tsconfig*.json          | TypeScript, decorator và build output          |
+| backend/tsconfig\*.json         | TypeScript, decorator và build output          |
 | backend/eslint.config.mjs       | TypeScript ESLint                              |
 | backend/jest.config.cjs         | Unit test, không cho pass giả khi chưa có test |
 | backend/test/jest-e2e.json      | Test API/integration                           |
