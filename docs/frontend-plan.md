@@ -15,17 +15,17 @@ Trạng thái: mới lập plan; chưa triển khai flow nào.
 
 ## Thứ tự và checklist
 
-| Flow | Nội dung | Trạng thái |
-| --- | --- | --- |
-| 01 | Khung app và điều hướng | Chưa làm |
-| 02 | Đăng nhập, đăng ký, đăng xuất (demo) | Chưa làm |
-| 03 | Danh sách Project | Chưa làm |
-| 04 | Tạo Project | Chưa làm |
-| 05 | Chi tiết Project và danh sách Task | Chưa làm |
-| 06 | Tạo Task | Chưa làm |
-| 07 | Đổi trạng thái và lọc Task | Chưa làm |
-| 08 | Dashboard và tiến độ | Chưa làm |
-| 09 | Review toàn bộ hành trình frontend | Chưa làm |
+| Flow | Nội dung                             | Trạng thái |
+| ---- | ------------------------------------ | ---------- |
+| 01   | Khung app và điều hướng              | Chưa làm   |
+| 02   | Đăng nhập, đăng ký, đăng xuất (demo) | Chưa làm   |
+| 03   | Danh sách Project                    | Chưa làm   |
+| 04   | Tạo Project                          | Chưa làm   |
+| 05   | Chi tiết Project và danh sách Task   | Chưa làm   |
+| 06   | Tạo Task                             | Chưa làm   |
+| 07   | Đổi trạng thái và lọc Task           | Chưa làm   |
+| 08   | Dashboard và tiến độ                 | Chưa làm   |
+| 09   | Review toàn bộ hành trình frontend   | Chưa làm   |
 
 ## Flow 01 — Khung app và điều hướng
 
