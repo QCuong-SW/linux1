@@ -1,38 +1,36 @@
 # MiniFlow frontend
 
-Flow 01 đã có khung giao diện và điều hướng. Các màn hình hiện là placeholder; chưa có dữ liệu, form auth hoặc kết nối backend.
+Frontend dùng API thật cho auth, Project, Task và Dashboard. Phiên đăng nhập nằm trong cookie httpOnly; dữ liệu lưu PostgreSQL, giữ nguyên sau refresh hoặc đăng nhập lại. Giao diện có loading, lỗi/retry, trạng thái trống và modal hỗ trợ bàn phím.
 
-## Chạy riêng frontend
+## Chạy frontend
 
-Từ thư mục gốc, nếu đã cài dependency:
+Từ thư mục gốc, cài dependency bằng `npm ci`, cấu hình env và khởi động PostgreSQL/backend theo [README](../README.md). Copy `frontend/.env.example` sang `frontend/.env.local`, sau đó:
 
 ```bash
 npm run dev:frontend
 ```
 
-Mở http://localhost:3000. Không cần chạy backend hoặc database.
+Mở http://localhost:3000. `NEXT_PUBLIC_API_URL=/api` dùng proxy Next đến `BACKEND_API_URL=http://127.0.0.1:3001/api`; backend cần `FRONTEND_ORIGIN=http://localhost:3000`. Đăng ký tài khoản mới với mật khẩu ít nhất 8 ký tự và tối đa 72 byte UTF-8.
 
-Nếu chỉ cài dependency cho frontend trong giai đoạn này, dùng lệnh sau để giữ nguyên package và lockfile ở root:
-
-```bash
-npm install --prefix frontend --workspaces=false --package-lock=false
-```
-
-## Review flow 01
-
-- `/` chuyển đến `/dashboard`.
-- Menu Dashboard và Projects chuyển route và đánh dấu trang đang chọn.
-- Mở `/projects/demo` để xem khung chi tiết; Projects vẫn được đánh dấu trên menu và có link quay lại.
-- Link Xem đăng nhập mở `/login`; chuyển qua `/register` và quay lại workspace bằng link.
-- Thu nhỏ về mobile: menu ở đầu trang, nội dung và card auth vừa màn hình.
-- Dùng Tab để kiểm tra focus và link Đến nội dung chính.
-
-Chưa có tài khoản hay phiên demo ở flow này. Nội dung các màn hình sẽ được hoàn thiện lần lượt theo [plan frontend](../docs/frontend-plan.md).
-
-## Kiểm tra riêng frontend
+## Kiểm tra
 
 ```bash
-npm run lint --prefix frontend
-npm run typecheck --prefix frontend
-npm run build --prefix frontend
+npm run lint --workspace frontend
+npm run typecheck --workspace frontend
+node --test frontend/test/api.test.mjs
+npm run build --workspace frontend -- --webpack
 ```
+
+Review trình duyệt với backend và PostgreSQL development đang chạy:
+
+```bash
+npm install --prefix /tmp/miniflow-review-tools --no-package-lock playwright
+node /tmp/miniflow-review-tools/node_modules/playwright/cli.js install chromium
+MINIFLOW_PLAYWRIGHT_MODULE=/tmp/miniflow-review-tools/node_modules/playwright/index.mjs node frontend/test/api-browser-review.mjs
+```
+
+Playwright và Chromium cài riêng cho công cụ review, không thêm vào dependency app. Có thể đặt `MINIFLOW_BASE_URL` (mặc định `http://localhost:3000`) và `MINIFLOW_REVIEW_ARTIFACTS` (mặc định `/tmp/miniflow-review/artifacts`). Runner tạo hai tài khoản `@example.test` riêng mỗi lần và để lại dữ liệu review trong DB development; không chạy với production.
+
+Review API thật kiểm tra đăng ký, tạo Project/Task, đổi trạng thái, refresh, Dashboard, cách ly tài khoản, logout/đăng nhập lại, API 401 và không tràn ngang ở 320/390/768/1440px. Script `browser-review.mjs` cũ là kịch bản lịch sử cho frontend demo, không dùng nghiệm thu phiên bản API thật.
+
+Dashboard hiển thị ba Project gần nhất và tối đa năm Task mới nhất chưa hoàn thành. Scope hiện tại chưa có sửa/xóa Project/Task hoặc phân công Task.

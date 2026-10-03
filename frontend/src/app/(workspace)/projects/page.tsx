@@ -1,14 +1,8 @@
 import type { Metadata } from 'next';
-import { FlowPlaceholder } from '@/shared/components/flow-placeholder';
+import { ProjectsView } from '@/features/projects/projects-view';
 
 export const metadata: Metadata = { title: 'Projects' };
 
-export default function ProjectsPage() {
-  return (
-    <FlowPlaceholder
-      title="Projects"
-      description="Chia công việc thành những project dễ quản lý."
-      flow="Flow 03–04 · Danh sách và tạo Project"
-    />
-  );
+export default function Page() {
+  return <ProjectsView />;
 }

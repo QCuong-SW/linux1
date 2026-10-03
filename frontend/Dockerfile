@@ -3,11 +3,13 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY frontend/package.json ./frontend/package.json
 COPY backend/package.json ./backend/package.json
-RUN npm ci --workspace frontend --include-workspace-root
+RUN --mount=type=cache,target=/root/.npm npm ci --workspace frontend --include-workspace-root
 FROM dependencies AS builder
 COPY frontend ./frontend
 ARG NEXT_PUBLIC_API_URL=/api
+ARG BACKEND_API_URL=http://backend:3001/api
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV BACKEND_API_URL=$BACKEND_API_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build --workspace frontend
 FROM node:24-bookworm-slim AS runner

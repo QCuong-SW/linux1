@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { useAuth } from '@/features/auth/auth-provider';
 import { Brand } from './brand';
 
 const navigation = [
@@ -11,6 +14,28 @@ const navigation = [
 
 export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { session, signOut } = useAuth();
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState('');
+  const busy = useRef(false);
+  async function logout() {
+    if (busy.current) return;
+    busy.current = true;
+    setPending(true);
+    setError('');
+    try {
+      await signOut();
+      router.replace('/login');
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : 'Đăng xuất chưa thành công. Vui lòng thử lại.',
+      );
+    } finally {
+      busy.current = false;
+      setPending(false);
+    }
+  }
   const isProjectDetail = pathname.startsWith('/projects/');
   const section = pathname === '/dashboard' ? 'Dashboard' : 'Projects';
 
@@ -39,16 +64,13 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
         <div className="sidebar-bottom">
-          <p className="preview-note">
-            Bản dựng giao diện<span>Flow 01 · Khung và điều hướng</span>
-          </p>
           <div className="profile">
             <span className="avatar" aria-hidden="true">
               M
             </span>
             <div>
-              <strong>Workspace demo</strong>
-              <span>Chưa kết nối tài khoản</span>
+              <strong>{session?.email}</strong>
+              <span>Tài khoản của bạn</span>
             </div>
           </div>
         </div>
@@ -68,11 +90,16 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
               <span aria-current="page">{section}</span>
             )}
           </nav>
-          <Link className="auth-preview-link" href="/login">
-            Xem đăng nhập <span aria-hidden="true">↗</span>
-          </Link>
+          <button className="logout-button" disabled={pending} onClick={() => void logout()}>
+            {pending ? 'Đang đăng xuất…' : 'Đăng xuất'}
+          </button>
         </header>
         <main id="main-content" tabIndex={-1}>
+          {error && (
+            <p className="field-error" role="alert">
+              {error}
+            </p>
+          )}
           {children}
         </main>
         <footer className="workspace-footer">

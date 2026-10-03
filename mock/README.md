@@ -1,31 +1,22 @@
-# MiniFlow — mock giao diện
+# Tiến độ MiniFlow
 
-Mock để review UI và luồng trước khi triển khai Next.js/NestJS. Không có backend, database hay xác thực thật. Dữ liệu chỉ tồn tại trong bộ nhớ, tải lại trang sẽ khôi phục mẫu.
+Cập nhật 2026-10-03:
 
-## Xem mock
+- Linux, Git trên Linux: hoàn thành phần nền tảng.
+- Frontend, backend, PostgreSQL và kết nối API: đã hoàn thành, review local đạt.
+- PR #4: runner đã sửa lỗi DATABASE_URL; production review local đạt. Kiểm tra CI trên GitHub trước khi merge.
+- VPS Ubuntu, DNS, Nginx và HTTPS công khai: để sau theo cập nhật của user ngày 2026-10-03, chưa nghiệm thu trên máy thật.
+- Backup ngoài VPS, restore, cảnh báo và rollback giữa hai phiên bản: cần nghiệm thu trước khi bật CD.
 
-Mở `mock/index.html` trực tiếp bằng trình duyệt, hoặc từ thư mục gốc repo chạy:
+## Thứ tự triển khai
 
-```bash
-python3 -m http.server 8080 --directory mock
-```
+1. Rà soát, commit/push PR #4; CI xanh mới merge.
+2. Chốt ngân sách, thuê VPS Ubuntu, cấu hình SSH key và DNS. Có thể cân nhắc sslip.io khi thực hành domain; vẫn cần VPS chạy ứng dụng.
+3. Thiết lập user deploy, firewall, Docker/Compose, Nginx và thư mục app; kiểm tra SSH/reboot.
+4. Cấp certificate Let's Encrypt, kiểm tra redirect và gia hạn.
+5. Deploy tay, migration, health, đăng ký/đăng nhập và Project/Task qua domain; reboot giữ dữ liệu.
+6. Backup ngoài VPS, restore bản copy, cảnh báo downtime/disk/RAM và rollback giữa hai phiên bản thực.
+7. Cấu hình GitHub secrets/deploy key; bật DEPLOY_ENABLED khi các bước trước đạt; xác nhận deploy đúng SHA qua CI.
+8. Cập nhật tài liệu theo bằng chứng nghiệm thu.
 
-Sau đó truy cập http://localhost:8080.
-
-Font Google là tùy chọn; khi offline giao diện dùng font hệ thống.
-
-## Luồng review
-
-1. Dashboard: tổng Project, số Task theo trạng thái, tiến độ từng Project.
-2. Projects: danh sách và form tạo Project.
-3. Project detail: tạo Task với tên/mô tả, đổi trạng thái bằng dropdown, lọc theo trạng thái.
-4. Login/Register: mở qua link trên thanh đầu trang hoặc nút đăng xuất ở sidebar. Submit form chỉ chuyển vào dashboard mẫu.
-5. Tạo một Project mới để xem trạng thái chưa có Task. Thu nhỏ trình duyệt để kiểm tra mobile.
-
-## Quy ước để triển khai sau khi chốt
-
-- Mỗi user sở hữu các Project của mình; chưa có thành viên, lời mời hay phân công Task.
-- Dashboard lấy số liệu từ Project/Task, không cần bảng riêng.
-- Task mới luôn bắt đầu ở TODO. Nhãn giao diện: Cần làm / Đang làm / Hoàn thành.
-- Đây là artifact review độc lập. App thật sẽ theo cấu trúc feature đã chốt; không đưa file mock vào production.
-- Chưa quyết định cơ chế auth qua mock này.
+Chi tiết tại [hướng dẫn triển khai](../docs/deployment.md) và [tiến độ vận hành](../docs/operations-plan.md). Mock trong thư mục này vẫn là artifact giao diện độc lập; ứng dụng thật nằm trong frontend/backend.

@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-cert
 COPY package.json package-lock.json ./
 COPY frontend/package.json ./frontend/package.json
 COPY backend/package.json ./backend/package.json
-RUN npm ci --workspace backend --include-workspace-root
+RUN --mount=type=cache,target=/root/.npm npm ci --workspace backend --include-workspace-root
 FROM dependencies AS builder
 COPY backend ./backend
 # Only to load Prisma configuration at build time; does not connect to a DB.
