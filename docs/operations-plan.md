@@ -95,7 +95,7 @@ Cập nhật 2026-10-03 theo yêu cầu hoàn thiện bộ triển khai gọn đ
 
 | Flow | Đã chuẩn bị/kiểm tra                                                                                     | Còn nghiệm thu ngoài máy                                             |
 | ---- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| H01  | Ba image build đạt; test script + review production container thật đạt; CI tích hợp các kiểm tra này     | Chạy workflow mới trên GitHub qua draft PR của nhánh ops/miniflow-production-20261003                        |
+| H01  | Ba image build đạt; test script + review production container thật đạt; CI tích hợp các kiểm tra này     | CI đang nghiệm thu qua draft PR #4                                   |
 | H02  | Hướng dẫn chọn máy, SSH key và DNS                                                                       | Chốt ngân sách, thuê máy, domain/IP                                  |
 | H03  | Bootstrap Ubuntu, deploy user, SSH, firewall, Docker, Nginx, log rotation và cập nhật bảo mật            | Chạy trên VPS mới; kiểm tra SSH và reboot                            |
 | H04  | Hai template Nginx kiểm tra syntax; HTTPS, redirect và ACME đạt với certificate local                    | DNS thật, certificate Let's Encrypt và renew dry-run                 |
