@@ -95,7 +95,7 @@ Cập nhật 2026-10-03 theo yêu cầu hoàn thiện bộ triển khai gọn đ
 
 | Flow | Đã chuẩn bị/kiểm tra                                                                                     | Còn nghiệm thu ngoài máy                                             |
 | ---- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| H01  | Ba image build đạt; test script + review production container thật đạt; CI tích hợp các kiểm tra này     | CI đang nghiệm thu qua draft PR #4                                   |
+| H01  | Ba image build đạt; test script + review production container thật đạt; CI tích hợp các kiểm tra này     | PR #4 đang sửa lỗi DATABASE_URL trong production review              |
 | H02  | Hướng dẫn chọn máy, SSH key và DNS                                                                       | Chốt ngân sách, thuê máy, domain/IP                                  |
 | H03  | Bootstrap Ubuntu, deploy user, SSH, firewall, Docker, Nginx, log rotation và cập nhật bảo mật            | Chạy trên VPS mới; kiểm tra SSH và reboot                            |
 | H04  | Hai template Nginx kiểm tra syntax; HTTPS, redirect và ACME đạt với certificate local                    | DNS thật, certificate Let's Encrypt và renew dry-run                 |
@@ -107,4 +107,4 @@ Bảy test bảo vệ script đạt: migration lỗi không thay app/release; ba
 
 Runner `infra/test/production-review.mjs` kiểm tra image không có env thật, runtime non-root, frontend proxy, cookie production Secure/httpOnly, cách ly hai user, restart giữ phiên/dữ liệu, pg_dump → pg_restore vào DB mới, rollback hai tag image và migration lỗi giữ app. Nginx template được chạy thật với TLS local, redirect và ACME path. Diễn tập rollback dùng hai tag cùng code; chưa nghiệm thu tương thích schema giữa hai phiên bản thực.
 
-Log review tại `/tmp/miniflow-production-review`; runner dọn đúng project/volume test riêng, DB development không bị thay đổi. Chưa chạy bootstrap Ubuntu trên máy này, chưa cấp certificate công khai, chưa copy backup ra dịch vụ ngoài và chưa bật CD production. CI gần nhất trên GitHub lỗi format auth form; working tree hiện tại đã chuẩn hóa, cần commit/push để nghiệm thu workflow mới.
+Log review tại `/tmp/miniflow-production-review`; runner dọn đúng project/volume test riêng, DB development không bị thay đổi. Chưa chạy bootstrap Ubuntu trên máy này, chưa cấp certificate công khai, chưa copy backup ra dịch vụ ngoài và chưa bật CD production. CI PR #4 ngày 2026-10-03 đã qua format, lint, test, build app và ba image; production review lỗi do DATABASE_URL của CI override env Compose, khiến migration kết nối localhost trong container. Runner đã tách URL database review; cần CI xanh trên commit sửa trước khi merge.

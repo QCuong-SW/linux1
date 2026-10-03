@@ -1,6 +1,6 @@
 # Plan frontend MiniFlow
 
-Trạng thái: đã triển khai và review đủ flow 01–09 cho frontend demo. Backend và API thật là giai đoạn riêng.
+Trạng thái ngày 2026-10-03: đã hoàn thành frontend demo flow 01–09 và nối auth/Project/Task/Dashboard với API, PostgreSQL thật. Đã review hai tài khoản, refresh, logout/đăng nhập lại, API 401 và mobile. Các flow demo và giới hạn bên dưới là nhật ký giai đoạn trước; triển khai VPS thật đang theo [operations plan](operations-plan.md).
 
 ## Cách triển khai
 
@@ -135,7 +135,7 @@ Trạng thái: đã triển khai và review đủ flow 01–09 cho frontend demo
 
 ## Mốc nối backend sau frontend
 
-Là giai đoạn riêng, chưa thuộc các flow demo bên trên: chốt hợp đồng response/lỗi và cơ chế cookie; thay adapter auth, project, task, dashboard lần lượt bằng HTTP client; kiểm tra hết phiên, quyền truy cập và lỗi server với backend thật. Route guard frontend phục vụ điều hướng; backend vẫn phải xác thực và kiểm tra quyền.
+Đã hoàn thành ngày 2026-10-03, sau các flow demo bên trên: chốt hợp đồng response/lỗi và cơ chế cookie; thay adapter auth, project, task, dashboard lần lượt bằng HTTP client; kiểm tra hết phiên, quyền truy cập và lỗi server với backend thật. Route guard frontend phục vụ điều hướng; backend vẫn phải xác thực và kiểm tra quyền.
 
 ## Nhật ký triển khai
 
@@ -147,4 +147,4 @@ Là giai đoạn riêng, chưa thuộc các flow demo bên trên: chốt hợp �
 - 2026-09-30, flow 09: kiểm tra toàn hành trình bằng Chromium headless, desktop 1440px và màn hình 320/390/768px. Đã kiểm tra validation, pending, lỗi/retry, phiên demo trống, modal bằng bàn phím, focus, lọc, cập nhật tiến độ, Project không tồn tại, logout và refresh. Công cụ demo cho phép bật lỗi tải/ghi, làm trống hoặc khôi phục dữ liệu mẫu; khóa reset trong lúc ghi.
 - Kiểm tra tự động: 9 test auth/adapter/validation/thống kê/concurrency đạt; lint, typecheck và production build webpack đạt. Script trình duyệt nằm ở `frontend/test/browser-review.mjs`; ảnh review được xuất ra `/tmp/miniflow-review/artifacts`.
 - Hạn chế môi trường: Turbopack production build bị chặn mở cổng nội bộ; đã kiểm tra bằng `npm run build --prefix frontend -- --webpack`. Playwright/Chromium chỉ cài ở `/tmp`, không thay package/lockfile của dự án.
-- Còn lại ngoài phạm vi demo: backend, database, auth thật, kết nối API và triển khai hạ tầng. Tải lại hoặc đăng xuất sẽ xóa dữ liệu demo; không có sửa/xóa Project/Task hoặc phân công thành viên trong scope hiện tại.
+- Mốc demo 2026-09-30: dữ liệu demo bị xóa khi tải lại/đăng xuất. Từ 2026-10-03, frontend dùng API và PostgreSQL, giữ dữ liệu sau refresh/đăng nhập lại. Còn nghiệm thu VPS/domain/HTTPS và vận hành thật; sửa/xóa Project/Task hoặc phân công thành viên vẫn ngoài scope.

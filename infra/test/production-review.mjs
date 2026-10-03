@@ -49,6 +49,8 @@ BACKEND_PORT=${apiPort}
 );
 const env = {
   ...process.env,
+  // Compose shell variables override --env-file; isolate the CI host database URL.
+  DATABASE_URL: `postgresql://review:${dbPassword}@postgres:5432/miniflow_review`,
   MINIFLOW_PROJECT_NAME: project,
   MINIFLOW_ENV_FILE: envFile,
   MINIFLOW_STATE_DIR: state,

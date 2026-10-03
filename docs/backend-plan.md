@@ -1,6 +1,6 @@
 # Flow nối backend MiniFlow
 
-Giai đoạn này được bắt đầu ngày 2026-10-01. Triển khai từng flow; mỗi flow có code, kiểm tra và ghi nhận kết quả trước khi sang flow tiếp theo. Frontend demo đã hoàn thành. Ngày 2026-10-02, user chốt hoàn thiện backend và database trước; phần backend flow 01–07 đã hoàn thành, frontend vẫn dùng demo và chưa nối API.
+Giai đoạn này được bắt đầu ngày 2026-10-01. Triển khai từng flow; mỗi flow có code, kiểm tra và ghi nhận kết quả trước khi sang flow tiếp theo. Trạng thái ngày 2026-10-03: backend flow 01–07 và frontend auth/Project/Task/Dashboard đã hoàn thành với API và PostgreSQL thật; hành trình trình duyệt đã được review. Nhật ký bên dưới giữ các mốc backend và frontend riêng.
 
 ## Kiến trúc
 
@@ -13,15 +13,15 @@ Giai đoạn này được bắt đầu ngày 2026-10-01. Triển khai từng fl
 
 ## Các flow
 
-| Flow | Hành trình và đầu ra                               | Điều kiện hoàn thành                                                                                             | Trạng thái         |
-| ---- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------ |
-| 01   | Nền Nest: bootstrap, env, CORS, validation, health | Env, HTTP prefix/CORS/validation và health 200/503 đạt; build đạt                                                | Hoàn thành         |
-| 02   | User → Project → Task trong PostgreSQL             | Prisma service dùng chung, schema, migration, FK/index, generate và kiểm tra DB Docker thật                      | Hoàn thành         |
-| 03   | Đăng ký → đăng nhập → refresh → đăng xuất          | Hash mật khẩu, cookie, `/auth/me`, guard, Origin; nối auth frontend; kiểm tra email trùng/sai mật khẩu/hết phiên | Backend hoàn thành |
-| 04   | Danh sách → tạo → chi tiết Project                 | API và UI dùng DB; validation tên; owner lấy từ phiên; user khác không xem được                                  | Backend hoàn thành |
-| 05   | Tạo → lọc → đổi trạng thái Task                    | API và UI; Task đúng Project; dữ liệu và quyền nhất quán; loading/error/retry                                    | Backend hoàn thành |
-| 06   | Dashboard cập nhật theo Project/Task               | Thống kê theo user, ba Project gần nhất và tối đa năm Task chưa hoàn thành; frontend bỏ dữ liệu demo             | Backend hoàn thành |
-| 07   | Review toàn hành trình với API thật                | Hai user cách ly dữ liệu; refresh giữ dữ liệu; logout/hết phiên; lỗi API; mobile; test và build hai app          | Backend hoàn thành |
+| Flow | Hành trình và đầu ra                               | Điều kiện hoàn thành                                                                                             | Trạng thái |
+| ---- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------- |
+| 01   | Nền Nest: bootstrap, env, CORS, validation, health | Env, HTTP prefix/CORS/validation và health 200/503 đạt; build đạt                                                | Hoàn thành |
+| 02   | User → Project → Task trong PostgreSQL             | Prisma service dùng chung, schema, migration, FK/index, generate và kiểm tra DB Docker thật                      | Hoàn thành |
+| 03   | Đăng ký → đăng nhập → refresh → đăng xuất          | Hash mật khẩu, cookie, `/auth/me`, guard, Origin; nối auth frontend; kiểm tra email trùng/sai mật khẩu/hết phiên | Hoàn thành |
+| 04   | Danh sách → tạo → chi tiết Project                 | API và UI dùng DB; validation tên; owner lấy từ phiên; user khác không xem được                                  | Hoàn thành |
+| 05   | Tạo → lọc → đổi trạng thái Task                    | API và UI; Task đúng Project; dữ liệu và quyền nhất quán; loading/error/retry                                    | Hoàn thành |
+| 06   | Dashboard cập nhật theo Project/Task               | Thống kê theo user, ba Project gần nhất và tối đa năm Task chưa hoàn thành; frontend bỏ dữ liệu demo             | Hoàn thành |
+| 07   | Review toàn hành trình với API thật                | Hai user cách ly dữ liệu; refresh giữ dữ liệu; logout/hết phiên; lỗi API; mobile; test và build hai app          | Hoàn thành |
 
 ## Chi tiết triển khai
 
