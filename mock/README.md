@@ -4,8 +4,8 @@ Cập nhật 2026-10-03:
 
 - Linux, Git trên Linux: hoàn thành phần nền tảng.
 - Frontend, backend, PostgreSQL và kết nối API: đã hoàn thành, review local đạt.
-- PR #4: đang nghiệm thu CI; sửa lỗi DATABASE_URL trong production review.
-- VPS Ubuntu, DNS, Nginx và HTTPS công khai: chưa nghiệm thu trên máy thật.
+- PR #4: runner đã sửa lỗi DATABASE_URL; production review local đạt. Kiểm tra CI trên GitHub trước khi merge.
+- VPS Ubuntu, DNS, Nginx và HTTPS công khai: để sau theo cập nhật của user ngày 2026-10-03, chưa nghiệm thu trên máy thật.
 - Backup ngoài VPS, restore, cảnh báo và rollback giữa hai phiên bản: cần nghiệm thu trước khi bật CD.
 
 ## Thứ tự triển khai
