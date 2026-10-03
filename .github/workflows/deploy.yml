@@ -1,6 +1,5 @@
 name: Deploy
 on:
-  workflow_dispatch:
   workflow_run:
     workflows: [CI]
     types: [completed]
@@ -12,8 +11,9 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
-    if: vars.APPLICATION_READY == 'true' && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' || github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    if: vars.DEPLOY_ENABLED == 'true' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: production
     steps:
       - name: Configure SSH
@@ -30,14 +30,23 @@ jobs:
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
-          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
         run: |
+          set -euo pipefail
           [[ "$DEPLOY_SHA" =~ ^[a-f0-9]{40}$ ]]
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "$SERVER_USER@$SERVER_HOST" "bash -s -- '$DEPLOY_SHA'" <<'REMOTE'
+          [[ "$SERVER_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]
+          [[ "$SERVER_HOST" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]]
+          [[ "$PRODUCTION_URL" =~ ^https://[a-zA-Z0-9][a-zA-Z0-9.-]*(:[0-9]+)?/?$ ]]
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=10 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 "$SERVER_USER@$SERVER_HOST" "bash -s -- '$DEPLOY_SHA' '$PRODUCTION_URL'" <<'REMOTE'
           set -euo pipefail
           cd /opt/miniflow
           test -z "$(git status --porcelain)"
           git fetch origin main
+          if [[ $(git rev-parse origin/main) != "$1" ]]; then
+            echo 'Skipping an older CI run; main has advanced.'
+            exit 0
+          fi
           git checkout --detach "$1"
-          bash infra/scripts/deploy.sh
+          MINIFLOW_PUBLIC_URL="$2" bash infra/scripts/deploy.sh
           REMOTE

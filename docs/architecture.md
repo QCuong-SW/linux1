@@ -10,7 +10,7 @@ Backend: `Controller → Service → Repository → Prisma → PostgreSQL`.
 - Service xử lý nghiệp vụ và quyền sở hữu. Không tin ownerId do client gửi.
 - Repository chứa truy vấn Prisma. Truy vấn theo ownerId/projectId để tránh truy cập dữ liệu người khác.
 - Database module cung cấp một Prisma service dùng chung, kết nối qua PostgreSQL driver adapter.
-- Auth service phụ trách xác thực; users repository chứa truy vấn User. Auth repository chỉ thêm nếu có truy vấn riêng, tránh hai repository cùng làm một việc.
+- Auth service phụ trách xác thực; users repository chứa truy vấn User. AuthRepository chứa truy vấn Session; UsersRepository tạo User + Session nguyên tử khi đăng ký và tra User theo email khi đăng nhập.
 - Dashboard service tổng hợp số liệu từ Project/Task; không có bảng Dashboard.
 - Health dùng kiểm tra DB đơn giản; không cần repository hoặc DTO nếu không có nhu cầu.
 
@@ -45,7 +45,7 @@ Bắt đầu bằng fetch và React state; chưa thêm Redux, Zustand, React Que
 
 ## Backend
 
-Các file sẽ viết khi bắt đầu triển khai:
+Tiến độ triển khai từng feature và kiểm tra được ghi tại [flow backend](backend-plan.md). Flow 01 dựng bootstrap/config/health; các file nghiệp vụ bên dưới được thêm trong flow tương ứng:
 
 ```text
 src/main.ts                                  Bootstrap, /api, CORS, validation
@@ -56,6 +56,7 @@ src/database/prisma/prisma.service.ts         PrismaClient + PrismaPg adapter
 src/modules/auth/auth.module.ts
 src/modules/auth/auth.controller.ts
 src/modules/auth/auth.service.ts
+src/modules/auth/auth.repository.ts
 src/modules/auth/dto/register.dto.ts
 src/modules/auth/dto/login.dto.ts
 src/modules/users/users.module.ts
@@ -78,12 +79,13 @@ src/modules/health/health.module.ts
 src/modules/health/health.controller.ts
 src/modules/health/health.service.ts
 src/common/guards/auth.guard.ts
+src/common/guards/origin.guard.ts
 src/common/decorators/current-user.decorator.ts
 ```
 
 Không thêm users controller/service nếu chưa có API quản lý user. Filters/interceptors chỉ triển khai khi có nhu cầu xử lý lỗi/log chung, không bắt buộc tạo đủ class.
 
-## API dự kiến
+## API đã triển khai
 
 | Method | Đường dẫn                      | Chức năng           |
 | ------ | ------------------------------ | ------------------- |
@@ -102,15 +104,18 @@ Không thêm users controller/service nếu chưa có API quản lý user. Filte
 
 `GET /health` trong scope ban đầu được thống nhất thành `/api/health` để đi qua cùng prefix Nginx. Health không cần đăng nhập. Các endpoint dữ liệu đều yêu cầu phiên hợp lệ và kiểm tra quyền.
 
-## Database dự kiến
+## Database đã triển khai
 
-Chưa viết model trong schema. Bước database sẽ thêm:
+Đã triển khai schema và migration đầu tiên ở flow 02; PostgreSQL development chạy bằng Docker Compose:
 
 - User: id, email unique, passwordHash, createdAt.
+- Session: id, userId, expiresAt, createdAt; FK User cascade, index userId/expiresAt. JWT tham chiếu Session, logout thu hồi ngay.
 - Project: id, name, ownerId, createdAt.
 - Task: id, title, description tùy chọn, status, projectId, createdAt.
 - Enum TaskStatus: TODO, IN_PROGRESS, DONE; default TODO.
 - Index trên Project.ownerId và Task.projectId.
+
+Request/response, cookie và mã lỗi: [hợp đồng API](api.md). Frontend vẫn là demo; nối API ở giai đoạn sau.
 
 Schema và migration nằm ở `backend/prisma`, tách khỏi Prisma service trong `backend/src`. Generated client nằm ở `src/database/prisma/generated`, không commit Git.
 

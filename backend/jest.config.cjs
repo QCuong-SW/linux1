@@ -14,6 +14,7 @@ module.exports = {
       },
     ],
   },
+  moduleNameMapper: { '^(\\.{1,2}/.*)\\.js$': '$1' },
   testEnvironment: 'node',
   collectCoverageFrom: ['**/*.ts', '!**/*.module.ts', '!main.ts', '!database/prisma/generated/**'],
   coverageDirectory: '../coverage',

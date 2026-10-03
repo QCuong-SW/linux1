@@ -1,0 +1,11 @@
+[Unit]
+Description=MiniFlow failure notification for %i
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+WorkingDirectory=/opt/miniflow
+EnvironmentFile=/opt/miniflow/.miniflow/operations.env
+ExecStart=/usr/bin/bash /opt/miniflow/infra/scripts/notify.sh %i
+UMask=0077

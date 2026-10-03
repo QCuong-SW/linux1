@@ -1,12 +1,12 @@
 # Plan frontend MiniFlow
 
-Trạng thái: mới lập plan; chưa triển khai flow nào.
+Trạng thái: đã triển khai và review đủ flow 01–09 cho frontend demo. Backend và API thật là giai đoạn riêng.
 
 ## Cách triển khai
 
 - Giới hạn được user chốt: chỉ triển khai frontend. Chỉ sửa `frontend/` và tài liệu frontend liên quan; không sửa `backend/`, Prisma, database, hợp đồng API, cấu hình hạ tầng hoặc package/lockfile ở root trong giai đoạn này để tránh conflict. Nếu cần thay đổi ngoài phạm vi, dừng phần phụ thuộc đó và trao đổi trước.
 - Không chạy backend, migration hoặc dịch vụ database. Các flow dùng adapter demo phía frontend; giai đoạn nối backend chỉ thực hiện khi user yêu cầu riêng.
-- Build từng flow theo thứ tự bên dưới. Mỗi lượt chỉ triển khai một flow, kiểm tra và review xong rồi mới chuyển flow tiếp theo.
+- Ban đầu triển khai từng flow theo thứ tự bên dưới. Ngày 2026-09-30, user yêu cầu hoàn thiện một lượt các flow còn lại; flow 03–09 được triển khai và review cùng nhau.
 - Dùng `mock/MiniFlow-Mock-Design.md` và giao diện trong `mock/` làm chuẩn về bố cục, màu và nội dung tiếng Việt.
 - Frontend đi trước backend: dùng dữ liệu mẫu và hàm bất đồng bộ trong adapter của từng feature để thao tác được; không gọi endpoint chưa tồn tại. Khi nối backend, thay adapter theo API trong `docs/architecture.md`.
 - Dữ liệu demo giữ trong bộ nhớ trong phiên chạy, reset khi tải lại trang; thông tin này phải rõ trong chế độ demo. Không lưu mật khẩu hoặc giả định auth demo là xác thực thật.
@@ -17,15 +17,15 @@ Trạng thái: mới lập plan; chưa triển khai flow nào.
 
 | Flow | Nội dung                             | Trạng thái |
 | ---- | ------------------------------------ | ---------- |
-| 01   | Khung app và điều hướng              | Chưa làm   |
-| 02   | Đăng nhập, đăng ký, đăng xuất (demo) | Chưa làm   |
-| 03   | Danh sách Project                    | Chưa làm   |
-| 04   | Tạo Project                          | Chưa làm   |
-| 05   | Chi tiết Project và danh sách Task   | Chưa làm   |
-| 06   | Tạo Task                             | Chưa làm   |
-| 07   | Đổi trạng thái và lọc Task           | Chưa làm   |
-| 08   | Dashboard và tiến độ                 | Chưa làm   |
-| 09   | Review toàn bộ hành trình frontend   | Chưa làm   |
+| 01   | Khung app và điều hướng              | Hoàn thành |
+| 02   | Đăng nhập, đăng ký, đăng xuất (demo) | Hoàn thành |
+| 03   | Danh sách Project                    | Hoàn thành |
+| 04   | Tạo Project                          | Hoàn thành |
+| 05   | Chi tiết Project và danh sách Task   | Hoàn thành |
+| 06   | Tạo Task                             | Hoàn thành |
+| 07   | Đổi trạng thái và lọc Task           | Hoàn thành |
+| 08   | Dashboard và tiến độ                 | Hoàn thành |
+| 09   | Review toàn bộ hành trình frontend   | Hoàn thành |
 
 ## Flow 01 — Khung app và điều hướng
 
@@ -139,4 +139,12 @@ Là giai đoạn riêng, chưa thuộc các flow demo bên trên: chốt hợp �
 
 ## Nhật ký triển khai
 
-Mỗi flow hoàn thành ghi: ngày, phạm vi đã làm, kiểm tra đã chạy, kết quả review và việc còn lại. Hiện chưa có flow hoàn thành.
+- Flow 01: khung app và route từ commit `e1e88ea`; được review lại trong hành trình hoàn chỉnh.
+- 2026-09-30, flow 02: form login/register dùng chung, validation, pending chống submit lặp, adapter lỗi/retry, guard và logout. Mật khẩu không truyền vào adapter hoặc lưu. Phiên và dữ liệu nằm ở root provider để giữ nguyên khi chuyển route, kể cả quay lại auth rồi được chuyển về Dashboard.
+- 2026-09-30, flow 03–04: card Project dùng chung, tiến độ từ Task, ngày tạo, trạng thái tải/lỗi/thử lại/trống và tạo Project. Modal trim tên, giới hạn 100 ký tự, giữ nội dung khi lỗi, khóa submit/Escape khi đang gửi; Tab/Shift+Tab giữ focus và đóng trả focus về nút mở.
+- 2026-09-30, flow 05–07: chi tiết Project, xử lý Project không tồn tại, bảng Task có mô tả và cuộn ngang; tạo Task TODO đúng Project; validation tên/mô tả; lọc bốn trạng thái với số lượng. Đổi trạng thái chỉ cập nhật sau thành công, lỗi giữ trạng thái cũ. Khi Task rời bộ lọc, focus trở về nút bộ lọc. Tạo Task thành công đưa bộ lọc về Tất cả.
+- 2026-09-30, flow 08: thống kê Dashboard từ cùng nguồn dữ liệu, ba Project gần nhất, link danh sách đầy đủ và tạo Project; tối đa năm Task mới nhất chưa hoàn thành dẫn tới Project. Project không có Task có tiến độ 0%; Task hoàn thành không còn trong mục cần chú ý.
+- 2026-09-30, flow 09: kiểm tra toàn hành trình bằng Chromium headless, desktop 1440px và màn hình 320/390/768px. Đã kiểm tra validation, pending, lỗi/retry, phiên demo trống, modal bằng bàn phím, focus, lọc, cập nhật tiến độ, Project không tồn tại, logout và refresh. Công cụ demo cho phép bật lỗi tải/ghi, làm trống hoặc khôi phục dữ liệu mẫu; khóa reset trong lúc ghi.
+- Kiểm tra tự động: 9 test auth/adapter/validation/thống kê/concurrency đạt; lint, typecheck và production build webpack đạt. Script trình duyệt nằm ở `frontend/test/browser-review.mjs`; ảnh review được xuất ra `/tmp/miniflow-review/artifacts`.
+- Hạn chế môi trường: Turbopack production build bị chặn mở cổng nội bộ; đã kiểm tra bằng `npm run build --prefix frontend -- --webpack`. Playwright/Chromium chỉ cài ở `/tmp`, không thay package/lockfile của dự án.
+- Còn lại ngoài phạm vi demo: backend, database, auth thật, kết nối API và triển khai hạ tầng. Tải lại hoặc đăng xuất sẽ xóa dữ liệu demo; không có sửa/xóa Project/Task hoặc phân công thành viên trong scope hiện tại.
